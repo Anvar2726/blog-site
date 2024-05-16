@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 // import demoImg from "../../../assets/images/posts-img-demo.png";
 
@@ -10,7 +11,7 @@ const MyPostCard = ({title, _id, category, description, photo, editPost, deleteP
   return (
     <div className="post-card">
       <div className="post-card__left">
-        <img src={imgURL(photo)} alt="" />
+        <LazyLoadImage width="100%" effect="blur" src={imgURL(photo)} alt="" />
       </div>
       <div>
         <p className="post-card__category">{name}</p>

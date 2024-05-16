@@ -49,6 +49,21 @@
   &__cards {
     margin-top: 40px;
   }
+
+  &__img-box{
+    display: flex;
+    flex-direction: column;
+
+    button{
+      background-color: red ;
+      padding: 8px;
+      color: #ffff;
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+  }
 }
 
 .box {
@@ -88,12 +103,12 @@
     justify-content: space-between;
     margin-bottom: 16px;
     padding: 0 20px;
-    button {
-      border: none;
-      outline: none;
-      background-color: transparent;
-      font-size: 18px;
-    }
+  }
+  &__close {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 18px;
   }
   &__form {
     display: flex;
@@ -109,7 +124,7 @@
       padding: 12px;
     }
 
-    button {
+    &__submit {
       color: rgb(35, 37, 54);
       margin-top: 20px;
       font-size: 18px;
@@ -120,4 +135,10 @@
       padding: 12px;
     }
   }
+}
+
+
+.delete__photo{
+  background-color: red;
+  border: none;
 }
