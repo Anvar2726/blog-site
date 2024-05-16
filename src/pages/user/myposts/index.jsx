@@ -87,6 +87,7 @@ const Myposts = () => {
   const openModal = () => {
     setShowModal(true);
     setPhoto(null);
+    setSelected(null)
     reset();
   };
 
