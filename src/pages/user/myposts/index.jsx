@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useRef, } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Spin } from "antd";
@@ -24,7 +24,14 @@ const Myposts = () => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [callback, setCallback] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [postData, setPostData] = useState(null);
+
+  const box = useRef(null)
+
+  const handleClick = (e) =>{
+    if(e.target.className === "box box__show"){
+      setShowModal(false)
+    }
+  }
 
   useEffect(() => {
     const getPosts = async () => {
@@ -36,7 +43,7 @@ const Myposts = () => {
         setPosts(data);
         const {
           data: { data: res },
-        } = await request("category");
+        } = await request("category", {params: {limit : 100}});
         setCategory(res);
       } finally {
         setLoading(false);
@@ -50,7 +57,6 @@ const Myposts = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
   } = useForm({
     resolver: yupResolver(postSchema),
     defaultValues:{
@@ -69,7 +75,7 @@ const Myposts = () => {
   const onSubmit = async (value) => {
     try {
       setBtnLoading(true);
-      const tags = value.tags.split(' ');
+      const tags = value.tags.split(',');
       const data = { ...value, photo: photo._id, tags };
       if(selected === null){
         await request.post("post", data);
@@ -88,7 +94,13 @@ const Myposts = () => {
     setShowModal(true);
     setPhoto(null);
     setSelected(null)
-    reset();
+    reset({
+      title: "",
+      description: "",
+      tags: "",
+      category: "",
+      photo: "",
+    });
   };
 
   const closeModal = () => {
@@ -123,15 +135,15 @@ const Myposts = () => {
    try{
     setBtnLoading(true);
     const { data } = await request(`post/${id}`);
-    setPostData(data);
-    setValue("title", postData?.title);
-    setValue("description", postData?.description);
-    setValue("category", postData?.category._id);
-    setValue("tags", postData?.tags)
-    setPhoto(postData?.photo);
+    setPhoto(data?.photo);
     setSelected(id);
     setShowModal(true);
-    console.log(data, photo);
+    reset({
+      title: data?.title,
+      description: data?.description,
+      tags: data?.tags,
+      category: data?.category._id
+    });
    }finally{
     setBtnLoading(false)
    }
@@ -176,7 +188,8 @@ const Myposts = () => {
           )}
         </Container>
       </section>
-      <div className={`box ${showModal ? "box__show" : ""}`}>
+
+      <div onClick={handleClick} ref={box} className={`box ${showModal ? "box__show" : ""}`}>
         <div className={`modal ${showModal ? "modal__show" : ""}`}>
           <div>
             <h1>Posts data</h1>
@@ -228,7 +241,7 @@ const Myposts = () => {
               </div>
             ) : (
               <input
-                {...register("photo")}
+                name="photo"
                 type="file"
                 accept="image/jpg, image/jpeg"
                 onChange={handlePhoto}

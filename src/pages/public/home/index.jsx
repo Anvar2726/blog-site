@@ -27,7 +27,7 @@ const HomePage = () => {
         setLoading(true);
         const {
           data: { data },
-        } = await request("category");
+        } = await request("category", {params : {limit: 100}});
         setCategoriesData(data);
         const { data: lastone } = await request("post/lastone");
         setLatestOnePost(lastone);
@@ -37,6 +37,7 @@ const HomePage = () => {
     };
     getData();
   }, []);
+
 
   return (
     <div>
