@@ -6,7 +6,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 
 import request from "../../../server/request";
-import postSchema from "../../../schemas/postSchema";
+import postSchema from "../../../schemas/post";
 
 import MyPostCard from "../../../components/card/my-post";
 import Container from "../../../components/container";

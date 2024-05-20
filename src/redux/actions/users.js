@@ -9,4 +9,7 @@ const getUsers = () => async (dispatch, getState)=>{
     dispatch({type: USERS, payload: {loading: false, users: data, total}})
 }
 
+const changeState = (payload) => ({type: USERS, payload})
+export {changeState}
+
 export default getUsers;

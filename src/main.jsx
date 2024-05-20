@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import AuthContextProvider from "./contexts/authContexts.jsx";
 
+import 'aos/dist/aos.css'
 import "swiper/css";
 import "react-toastify/dist/ReactToastify.css";
 import 'react-lazy-load-image-component/src/effects/blur.css';

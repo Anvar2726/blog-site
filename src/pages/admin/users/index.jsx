@@ -4,18 +4,31 @@ import { Button, Flex, Image, Pagination, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
 import { USERS } from "../../../redux/types";
-import getUsers from "../../../redux/actions/users";
+import getUsers, { changeState } from "../../../redux/actions/users";
 import { BASE } from "../../../consts";
+import request from "../../../server/request";
 
 const Users = () => {
-  const { loading, total, page, users } = useSelector((state) => state.users);
+  const { loading, total, page, users, refetch, btnLoading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUsers());
-  }, [dispatch, page]);
-
-  const deletetUser = (id) => {
-    console.log(id);
+  }, [dispatch, page, refetch]);
+  
+  const refresh = () =>{
+    dispatch(changeState({refetch: !refetch}))
+  }
+  const deletetUser = async(id) => {
+    const checkDelete = window.confirm("Do you want delete this user ?")
+    if(checkDelete){
+      try{
+        dispatch(changeState({btnLoading: true}))
+      await request.delete(`user/${id}`)
+      refresh()
+      }finally{
+        dispatch(changeState({btnLoading: false}))
+      }
+    }
   };
 
   const editUser = (id) => {
@@ -57,8 +70,8 @@ const Users = () => {
           <Button onClick={() => editUser(_id)} type="primary">
             Edit
           </Button>
-          <Button onClick={() => deletetUser(_id)} danger type="primary">
-            Edit
+          <Button disabled={btnLoading} onClick={() => deletetUser(_id)} danger type="primary">
+            Delete
           </Button>
         </Flex>
       ),

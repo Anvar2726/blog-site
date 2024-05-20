@@ -5,6 +5,11 @@ const initialState = {
     categories: [],
     total: 0,
     page: 1,
+    isOpen: false,
+    selected: null,
+    photo: null,
+    btnLoading: false,
+    refetch: false
 }
 
 const categoriesReducer = (state = initialState, { type, payload }) => {
@@ -16,4 +21,4 @@ const categoriesReducer = (state = initialState, { type, payload }) => {
   }
 }
 
-export default categoriesReducer;
+export default categoriesReducer; 

@@ -9,4 +9,6 @@ const getCategories = () => async (dispatch, getState)=>{
     dispatch({type: CATEGORIES, payload: {loading: false, categories: data, total}})
 }
 
-export default getCategories
+const changeState = (payload) => ({type: CATEGORIES, payload})
+
+export { getCategories, changeState} 

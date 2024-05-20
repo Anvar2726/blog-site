@@ -4,7 +4,11 @@ const initialState = {
   loading: false,
   users: [],
   total: 0,
-  page: 1
+  page: 1,
+  isOpen: false,
+  btnLoading: false,
+  selected: null,
+  refetch: false,
 };
 
 const userReducer = (state = initialState, { type, payload }) => {

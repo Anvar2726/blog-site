@@ -12,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "antd": "^5.17.0",
+    "aos": "^2.3.4",
     "axios": "^1.6.8",
     "js-cookie": "^3.0.5",
     "prop-types": "^15.8.1",

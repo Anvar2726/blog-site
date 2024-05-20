@@ -1,12 +1,60 @@
+import { Fragment } from 'react';
 import './style.scss'
 
 const Loading = () => {
   return (
-    <div className="loader">
-      <div className="inner one"></div>
-      <div className="inner two"></div>
-      <div className="inner three"></div>
-    </div>
+    <Fragment>
+      <div className="hexagon" aria-label="Animated hexagonal ripples">
+	<div className="hexagon__group">
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+	</div>
+	<div className="hexagon__group">
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+	</div>
+	<div className="hexagon__group">
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+	</div>
+	<div className="hexagon__group">
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+	</div>
+	<div className="hexagon__group">
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+	</div>
+	<div className="hexagon__group">
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+		<div className="hexagon__sector"></div>
+	</div>
+</div>
+    </Fragment>
   );
 };
 

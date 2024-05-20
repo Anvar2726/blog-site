@@ -12,5 +12,6 @@ const getPosts = () => async (dispatch, getState) => {
   } = await request("post", { params });
   dispatch({ type: POSTS, payload: { loading: false, posts: data, total } });
 };
-
-export default getPosts;
+ 
+const changeState = (payload) => ({type: POSTS, payload})
+export  {getPosts, changeState};

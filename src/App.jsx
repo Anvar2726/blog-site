@@ -21,7 +21,6 @@ import AdminAccount from "./pages/admin/account";
 
 const App = () => {
   const { auth, role } = useContext(AuthContext);
-
   return (
     <BrowserRouter>
       <Routes>
