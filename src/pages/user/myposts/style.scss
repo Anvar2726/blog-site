@@ -1,6 +1,15 @@
 .my-posts {
   margin-top: 82px;
 
+  &__title{
+    color: rgb(35, 37, 54);
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 64px;
+        letter-spacing: -2px;
+        margin-bottom: 16px;
+  }
+
   &__box {
     padding-top: 40px;
     div {

@@ -173,7 +173,7 @@ const Myposts = () => {
                 <h1>No posts</h1>
               ) : (
                 <Fragment>
-                  <h1>My posts quantity: {posts?.length}</h1>
+                  <h1 className="my-posts__title">My posts quantity: {posts?.length}</h1>
                   {posts?.map((el) => (
                     <MyPostCard
                       key={el._id}
@@ -201,17 +201,17 @@ const Myposts = () => {
               placeholder="Post Title"
               {...register("title")}
             />
-            <p>{errors.title?.message}</p>
+            <p style={{color: "red"}}>{errors.title?.message}</p>
 
             <input
               type="text"
               placeholder="Post description"
               {...register("description")}
             />
-            <p>{errors.description?.message}</p>
+            <p style={{color: "red"}}>{errors.description?.message}</p>
 
             <input type="text" placeholder="Post tags" {...register("tags")} />
-            <p>{errors.tags?.message}</p>
+            <p style={{color: "red"}}>{errors.tags?.message}</p>
 
             <select {...register("category")}>
               <option value="">Select category</option>
@@ -221,14 +221,14 @@ const Myposts = () => {
                 </option>
               ))}
             </select>
-            <p>{errors.category?.message}</p>
+            <p style={{color: "red"}}>{errors.category?.message}</p>
 
             {photo ? (
               <div className="my-posts__img-box">
                 <img
                   src={imgURL(photo)}
                   alt="post"
-                  style={{ width: "200px", height: "200px" }}
+                  style={{ width: "100%", height: "200px" }}
                 />
                 <button
                   type="button"

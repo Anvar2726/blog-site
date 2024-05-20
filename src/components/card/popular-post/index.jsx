@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import imgURL from "../../../utils/getImgUrl";
 
 import "./style.scss";
-import imgURL from "../../../utils/getImgUrl";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useNavigate } from "react-router-dom";
 
 const PopularPostCard = ({ title, description, user, photo, _id }) => {
   const { first_name, last_name, createdAt } = user;
@@ -13,7 +12,7 @@ const PopularPostCard = ({ title, description, user, photo, _id }) => {
   }
   return (
     <div onClick={handleWay} className="popular-post-card">
-      <LazyLoadImage
+      <img
         className="popular-post-card__img"
         src={imgURL(photo)}
         alt={title}
