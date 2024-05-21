@@ -73,7 +73,7 @@ const AboutPage = () => {
               <img data-aos="fade-up" src={blogImg} alt="blog " />
               <div></div>
             </div>
-            <div data-aos="fade-left">
+            <div data-aos="fade-down">
               <h3 className="blog__title">Why we started this Blog</h3>
               <p className="blog__desc">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
