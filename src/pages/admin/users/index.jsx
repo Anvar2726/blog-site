@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, } from "react";
 
 import { Button, Flex, Image, Pagination, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import request from "../../../server/request";
 const Users = () => {
   const { loading, total, page, users, refetch, btnLoading } = useSelector((state) => state.users);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch, page, refetch]);
@@ -31,9 +32,6 @@ const Users = () => {
     }
   };
 
-  const editUser = (id) => {
-    console.log(id);
-  };
 
   const handlePage = (p) =>{
     dispatch({type: USERS, payload: {page: p}})
@@ -67,9 +65,6 @@ const Users = () => {
       key: "action",
       render: (_id) => (
         <Flex gap={"small"}>
-          <Button onClick={() => editUser(_id)} type="primary">
-            Edit
-          </Button>
           <Button disabled={btnLoading} onClick={() => deletetUser(_id)} danger type="primary">
             Delete
           </Button>
@@ -84,7 +79,6 @@ const Users = () => {
         title={() => (
           <Flex align="center" justify="space-between">
             <h1>Users quantity: {total}</h1>
-            <Button type="dashed">Add user</Button>
           </Flex>
         )}
         columns={columns}

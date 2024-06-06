@@ -102,6 +102,8 @@
   margin: 0 auto;
   transform: translateY(-180%);
   transition: 0.4s;
+  height: calc(100vh - 10px);
+  overflow-y: scroll;
 
   &__show {
     transform: translateY(0);

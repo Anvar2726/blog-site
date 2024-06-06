@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Button,
   Flex,
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeState, getCategories } from "../../../redux/actions/categories";
 import imgURL from "../../../utils/getImgUrl";
 import request from "../../../server/request";
+import { BASE } from "../../../consts";
 
 const AdminCategories = () => {
   const {
@@ -29,6 +30,8 @@ const AdminCategories = () => {
   } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [checkPhoto, setCheckPhoto] = useState(false)
+
 
   useEffect(() => {
     dispatch(getCategories());
@@ -77,6 +80,7 @@ const AdminCategories = () => {
       dispatch(changeState({ btnLoading: true }));
       const { data } = await request.post("upload", formData);
       dispatch(changeState({ photo: data }));
+      setCheckPhoto(true);
     } finally {
       dispatch(changeState({ btnLoading: false }));
     }
@@ -95,8 +99,17 @@ const AdminCategories = () => {
 
   const editCategory = async (id) => {
     const { data } = await request(`category/${id}`);
+    try {
+      await request(
+        `${BASE}upload/${data?.photo?._id}.${data?.photo?.name.split(".")[1]}`
+      );
+      setCheckPhoto(true);
+    } catch {
+      setCheckPhoto(false);
+    }
     dispatch(changeState({ selected: id, photo: data.photo, isOpen: true }));
     form.setFieldsValue(data);
+
   };
 
   const deleteCategory = async (id) => {
@@ -168,7 +181,7 @@ const AdminCategories = () => {
         pagination={false}
         loading={loading}
       />
-      {total >= 10 ? (
+      {total > 10 ? (
         <Pagination defaultCurrent={page} total={total} onChange={handlePage} />
       ) : null}
       <Modal
@@ -215,6 +228,7 @@ const AdminCategories = () => {
             <Input />
           </Form.Item>
           {photo ? (
+            checkPhoto ? 
             <Flex vertical="column" gap={"small"}>
               <Image src={imgURL(photo)} />
               <Button
@@ -225,7 +239,13 @@ const AdminCategories = () => {
               >
                 Delete photo
               </Button>
-            </Flex>
+            </Flex> :
+             <input
+             disabled={btnLoading}
+             type="file"
+             accept="image/jpeg, image/png, image/JPG"
+             onChange={handlePhoto}
+           />
           ) : (
             <input
               disabled={btnLoading}

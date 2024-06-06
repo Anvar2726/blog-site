@@ -7,7 +7,6 @@ import Container from "../../../components/container";
 import CategoryPostCard from "../../../components/card/category-post";
 
 import "./style.scss";
-import Loading from "../../../components/loading";
 
 const CategoriesPage = () => {
   const { categoryId } = useParams();
@@ -42,43 +41,37 @@ const CategoriesPage = () => {
   const style = {
     textAlign: "center",
     fontSize: "30px",
-    marginTop: "20px"
-  }
+    marginTop: "20px",
+  };
 
   return (
     <section className="category">
-      {loading ? (
-        <Loading />
-      ) : (
-        <Container>
-          {loading ? (
-            <div></div>
-          ) : (
-            <div className="category__info">
-              <h1 className="category__title">{categoryData?.name}</h1>
-              <p className="category__text">{categoryData?.description}</p>
-              <h3> BLOG {` >  ${categoryData?.name}`} </h3>
-            </div>
-          )}
-          {postsData?.length === 0 ? (
-            <h1 style={style}>No posts</h1>
-          ) : (
-            <Fragment>
-              <input
-                onChange={handleValue}
-                type="text"
-                placeholder="Searching ..."
-                className="posts__search"
-              />
-              <div className="category__posts">
-                {postsData?.map((el) => (
-                  <CategoryPostCard key={el._id} {...el} />
-                ))}
-              </div>
-            </Fragment>
-          )}
-        </Container>
-      )}
+      <Container>
+        {loading ? (
+          <div></div>
+        ) : (
+          <div className="category__info">
+            <h1 className="category__title">{categoryData?.name}</h1>
+            <p className="category__text">{categoryData?.description}</p>
+            <h3> BLOG {` >  ${categoryData?.name}`} </h3>
+          </div>
+        )}
+        <Fragment>
+          <input
+            onChange={handleValue}
+            type="text"
+            placeholder="Searching ..."
+            className="posts__search"
+          />
+          <div className="category__posts">
+            {postsData?.length === 0 ? (
+              <h1 style={style}>No posts</h1>
+            ) : (
+              postsData?.map((el) => <CategoryPostCard key={el._id} {...el} />)
+            )}
+          </div>
+        </Fragment>
+      </Container>
     </section>
   );
 };

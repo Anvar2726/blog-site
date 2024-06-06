@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { Flex, Spin } from "antd";
 import { Link } from "react-router-dom";
 
 import imgURL from "../../../utils/getImgUrl";
@@ -42,10 +41,8 @@ const HomePage = () => {
     getData();
   }, []);
 
-
   return (
     <Fragment>
-      {loading ? <Loading /> :
       <Fragment>
       <section
         className="hero"
@@ -53,7 +50,8 @@ const HomePage = () => {
           backgroundImage: `url(${img})`,
           backgroundRepeat: " no-repeat",
           backgroundSize: "cover",
-          maxWidth: "1440px",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
           width: "100%",
           height: "720px",
           margin: "0 auto",
@@ -131,14 +129,7 @@ const HomePage = () => {
         <Container>
           <h1 className="categories__title">Choose A Catagory</h1>
           {loading ? (
-            <Flex
-              align="center"
-              justify="center"
-              gap="middle"
-              style={{ marginBottom: "50px" }}
-            >
-              <Spin size="large" />
-            </Flex>
+            <Loading />
           ) : (
             <Swiper
               slidesPerView={4}
@@ -182,7 +173,7 @@ const HomePage = () => {
           )}
         </Container>
       </section>
-      </Fragment>}
+      </Fragment>
     </Fragment>
   );
 };

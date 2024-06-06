@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useRef, } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Spin } from "antd";
@@ -14,6 +14,7 @@ import Loading from "../../../components/loading";
 import imgURL from "../../../utils/getImgUrl";
 
 import "./style.scss";
+import { BASE } from "../../../consts";
 
 const Myposts = () => {
   const [loading, setLoading] = useState(false);
@@ -24,14 +25,15 @@ const Myposts = () => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [callback, setCallback] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [checkPhoto, setCheckPhoto] = useState(false);
 
-  const box = useRef(null)
+  const box = useRef(null);
 
-  const handleClick = (e) =>{
-    if(e.target.className === "box box__show"){
-      setShowModal(false)
+  const handleClick = (e) => {
+    if (e.target.className === "box box__show") {
+      setShowModal(false);
     }
-  }
+  };
 
   useEffect(() => {
     const getPosts = async () => {
@@ -43,7 +45,7 @@ const Myposts = () => {
         setPosts(data);
         const {
           data: { data: res },
-        } = await request("category", {params: {limit : 100}});
+        } = await request("category", { params: { limit: 100 } });
         setCategory(res);
       } finally {
         setLoading(false);
@@ -59,13 +61,13 @@ const Myposts = () => {
     reset,
   } = useForm({
     resolver: yupResolver(postSchema),
-    defaultValues:{
+    defaultValues: {
       title: "",
       description: "",
       tags: "",
       category: "",
       photo: "",
-    }
+    },
   });
 
   const refetch = () => {
@@ -75,11 +77,11 @@ const Myposts = () => {
   const onSubmit = async (value) => {
     try {
       setBtnLoading(true);
-      const tags = value.tags.split(',');
+      const tags = value.tags.split(",");
       const data = { ...value, photo: photo._id, tags };
-      if(selected === null){
+      if (selected === null) {
         await request.post("post", data);
-      }else{
+      } else {
         await request.put(`post/${selected}`, data);
       }
       setShowModal(false);
@@ -93,7 +95,7 @@ const Myposts = () => {
   const openModal = () => {
     setShowModal(true);
     setPhoto(null);
-    setSelected(null)
+    setSelected(null);
     reset({
       title: "",
       description: "",
@@ -112,11 +114,14 @@ const Myposts = () => {
     formData.append("file", e.target.files[0]);
     const { data } = await request.post("upload", formData);
     setPhoto(data);
+    setCheckPhoto(true)
   };
 
-  const deletePhoto = async(id) => {
-    const checkDeletePhoto = window.confirm("Do you want to delete the picture")
-    if(checkDeletePhoto){
+  const deletePhoto = async (id) => {
+    const checkDeletePhoto = window.confirm(
+      "Do you want to delete the picture"
+    );
+    if (checkDeletePhoto) {
       await request.delete(`upload/${id}`);
       setPhoto(null);
       refetch();
@@ -132,21 +137,29 @@ const Myposts = () => {
   };
 
   const editPost = async (id) => {
-   try{
-    setBtnLoading(true);
-    const { data } = await request(`post/${id}`);
-    setPhoto(data?.photo);
-    setSelected(id);
-    setShowModal(true);
-    reset({
-      title: data?.title,
-      description: data?.description,
-      tags: data?.tags,
-      category: data?.category._id
-    });
-   }finally{
-    setBtnLoading(false)
-   }
+    try {
+      setBtnLoading(true);
+      const { data } = await request(`post/${id}`);
+      setPhoto(data?.photo);
+      try {
+        await request(
+          `${BASE}upload/${data?.photo?._id}.${data?.photo?.name.split(".")[1]}`
+        );
+        setCheckPhoto(true);
+      } catch {
+        setCheckPhoto(false);
+      }
+      setSelected(id);
+      setShowModal(true);
+      reset({
+        title: data?.title,
+        description: data?.description,
+        tags: data?.tags.toString(),
+        category: data?.category._id,
+      });
+    } finally {
+      setBtnLoading(false);
+    }
   };
 
   return (
@@ -173,7 +186,9 @@ const Myposts = () => {
                 <h1>No posts</h1>
               ) : (
                 <Fragment>
-                  <h1 className="my-posts__title">My posts quantity: {posts?.length}</h1>
+                  <h1 className="my-posts__title">
+                    My posts quantity: {posts?.length}
+                  </h1>
                   {posts?.map((el) => (
                     <MyPostCard
                       key={el._id}
@@ -189,11 +204,17 @@ const Myposts = () => {
         </Container>
       </section>
 
-      <div onClick={handleClick} ref={box} className={`box ${showModal ? "box__show" : ""}`}>
+      <div
+        onClick={handleClick}
+        ref={box}
+        className={`box ${showModal ? "box__show" : ""}`}
+      >
         <div className={`modal ${showModal ? "modal__show" : ""}`}>
           <div>
             <h1>Posts data</h1>
-            <button className="modal__close" onClick={closeModal}>X</button>
+            <button className="modal__close" onClick={closeModal}>
+              X
+            </button>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="modal__form">
             <input
@@ -201,17 +222,17 @@ const Myposts = () => {
               placeholder="Post Title"
               {...register("title")}
             />
-            <p style={{color: "red"}}>{errors.title?.message}</p>
+            <p style={{ color: "red" }}>{errors.title?.message}</p>
 
             <input
               type="text"
               placeholder="Post description"
               {...register("description")}
             />
-            <p style={{color: "red"}}>{errors.description?.message}</p>
+            <p style={{ color: "red" }}>{errors.description?.message}</p>
 
             <input type="text" placeholder="Post tags" {...register("tags")} />
-            <p style={{color: "red"}}>{errors.tags?.message}</p>
+            <p style={{ color: "red" }}>{errors.tags?.message}</p>
 
             <select {...register("category")}>
               <option value="">Select category</option>
@@ -221,24 +242,33 @@ const Myposts = () => {
                 </option>
               ))}
             </select>
-            <p style={{color: "red"}}>{errors.category?.message}</p>
+            <p style={{ color: "red" }}>{errors.category?.message}</p>
 
             {photo ? (
-              <div className="my-posts__img-box">
-                <img
-                  src={imgURL(photo)}
-                  alt="post"
-                  style={{ width: "100%", height: "200px" }}
+              checkPhoto ? (
+                <div className="my-posts__img-box">
+                  <img
+                    src={imgURL(photo)}
+                    alt="post"
+                    style={{ width: "100%", height: "200px" }}
+                  />
+                  <button
+                    type="button"
+                    className="delete__photo"
+                    onClick={() => deletePhoto(photo?._id)}
+                    disabled={btnLoading}
+                  >
+                    Delete photo
+                  </button>
+                </div>
+              ) : (
+                <input
+                  name="photo"
+                  type="file"
+                  accept="image/jpg, image/jpeg"
+                  onChange={handlePhoto}
                 />
-                <button
-                  type="button"
-                  className="delete__photo"
-                  onClick={() => deletePhoto(photo?._id)}
-                  disabled={btnLoading}
-                >
-                  Delete photo
-                </button>
-              </div>
+              )
             ) : (
               <input
                 name="photo"
@@ -248,7 +278,7 @@ const Myposts = () => {
               />
             )}
 
-            <button className="modal__form__submit"  type="submit">
+            <button className="modal__form__submit" type="submit">
               {btnLoading ? (
                 <Spin
                   indicator={

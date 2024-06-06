@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -17,10 +17,12 @@ import { POSTS } from "../../../redux/types";
 import imgURL from "../../../utils/getImgUrl";
 import { getCategories } from "../../../redux/actions/categories";
 import request from "../../../server/request";
+import { BASE } from "../../../consts";
 
 const AdminPosts = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [checkPhoto, setCheckPhoto] = useState(false)
   const {
     posts,
     loading,
@@ -85,6 +87,7 @@ const AdminPosts = () => {
       dispatch(changeState({ btnLoading: true }));
       const { data } = await request.post("/upload", formData);
       dispatch(changeState({ photo: data }));
+      setCheckPhoto(true);
     } finally {
       dispatch(changeState({ btnLoading: false }));
     }
@@ -104,8 +107,16 @@ const AdminPosts = () => {
     dispatch(changeState({ selected: id }));
     dispatch(changeState({ isOpen: true }));
     const { data: data } = await request.get(`post/${id}`);
-    const value = { ...data, category: data.category._id };
+    const value = { ...data, category: data.category._id, tags: data?.tags.toString() };
     form.setFieldsValue(value);
+    try {
+      await request(
+        `${BASE}upload/${data?.photo?._id}.${data?.photo?.name.split(".")[1]}`
+      );
+      setCheckPhoto(true);
+    } catch {
+      setCheckPhoto(false);
+    }
     dispatch(changeState({ photo: data.photo }));
   };
 
@@ -265,6 +276,7 @@ const AdminPosts = () => {
             </Select>
           </Form.Item>
           {photo ? (
+            checkPhoto ? 
             <Flex vertical="column" gap={"small"}>
               <Image src={imgURL(photo)} />
               <Button
@@ -275,7 +287,13 @@ const AdminPosts = () => {
               >
                 Delete photo
               </Button>
-            </Flex>
+            </Flex> :
+             <input
+             disabled={btnLoading}
+             type="file"
+             accept="image/jpeg, image/png, image/JPG"
+             onChange={handlePhoto}
+           />
           ) : (
             <input
               disabled={btnLoading}
